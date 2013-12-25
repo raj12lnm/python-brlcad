@@ -25,7 +25,9 @@ import sys
 import ctypes
 
 # TODO: make better bindings and pick better names
-import wdb
+#import wdb
+import brlcad._bindings.libwdb as wdb
+import brlcad._bindings.librt as rt
 
 def main(argv):
     """
@@ -70,7 +72,7 @@ def main(argv):
     # Create a wmember structure for each of the items that we want in the
     # combination. The return from mk_addmember is a pointer to the wmember
     # structure.
-    some_wmember = wdb._libs['/usr/brlcad/lib/libwdb.so'].mk_addmember("box.s", somelistp, wdb.NULL, ord("u"))
+    some_wmember = wdb._libs['/home/csaba/deploy/brlcad/dev-7.24.1/lib/libwdb.so'].mk_addmember("box.s", somelistp, wdb.NULL, ord("u"))
 
     # Add the second member to the database.
     #
@@ -78,7 +80,7 @@ def main(argv):
     # in the database when you create the wmember structure OR when you create
     # the combination. So mis-typing the name of a sub-element for a
     # region/combination can be a problem.
-    another_wmember = wdb._libs['/usr/brlcad/lib/libwdb.so'].mk_addmember("ball.s", somelistp, wdb.NULL, ord("u"))
+    another_wmember = wdb._libs['/home/csaba/deploy/brlcad/dev-7.24.1/lib/libwdb.so'].mk_addmember("ball.s", somelistp, wdb.NULL, ord("u"))
 
     # Create the combination
     #

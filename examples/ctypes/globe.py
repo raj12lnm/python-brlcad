@@ -10,14 +10,15 @@ globe.c header text:
 python attribution:
 
     :author: Kat Harrison <katherinej.harrison@gmail.com>
-    :date: 2013-09-011
+    :date: 2013-09-11
     :license: BSD
 
 """
 
 import sys
 import ctypes
-import wdb
+import brlcad._bindings.libwdb as wdb
+import brlcad._bindings.librt as rt
 
 
 def main(argv):
@@ -37,8 +38,9 @@ def main(argv):
     wm_hd = wdb.wmember()  # These are probably not necessary.
     bigList = wdb.wmember()
 
-    db_fp = wdb.wdb_fopen(argv[1])
+    db_fp = rt.wdb_fopen(argv[1])
 
+    nonestuff = None
     wdb.mk_id(db_fp, "Globe Database")  # Create the database header record
 
     # Make a region that is the union of these two objectsion. To accomplish
@@ -53,7 +55,8 @@ def main(argv):
     is_region = 1
     # make a sphere centered at 1.0, 2.0, 3.0 with radius .75
     wdb.mk_sph(db_fp, "land.s", p1, initialSize)
-    wdb._libs.values()[0].mk_addmember("land.s", somelistp, wdb.NULL, ord("u"))
+    #wdb._libs.values()[0].mk_addmember("land.s", somelistp, wdb.NULL, ord("u"))
+    wdb.mk_addmember("land.s", somelistp, nonestuff, ord("u"))
     wdb.mk_comb(db_fp,
                 "land.c",
                 somelistp,
@@ -64,7 +67,7 @@ def main(argv):
                 0, 0, 0,
                 0, 0, 0,
                 0)
-    wdb._libs.values()[0].mk_addmember("land.s", somelistp, wdb.NULL, ord("u"))
+    wdb.mk_addmember("land.s", somelistp, nonestuff, ord("u"))
     wdb.mk_comb(db_fp,
                 "land.r",
                 somelistp,
@@ -87,8 +90,8 @@ def main(argv):
 
         solidName = "air.%d.s" % counter
         wdb.mk_sph(db_fp, solidName, p1, currentSize)
-        wdb.mk_addmember(solidName, somelistp, wdb.NULL, ord("u"))
-        wdb.mk_addmember(prevSolid, somelistp, wdb.NULL, ord("-"))
+        wdb.mk_addmember(solidName, somelistp, nonestuff, ord("u"))
+        wdb.mk_addmember(prevSolid, somelistp, nonestuff, ord("-"))
 
         # make the spatial combination
         name = "air.%d.c" % counter
@@ -96,13 +99,13 @@ def main(argv):
                     name,
                     somelistp,
                     0,
-                    wdb.NULL,
-                    wdb.NULL,
-                    wdb.NULL,
+                    nonestuff,
+                    nonestuff,
+                    nonestuff,
                     0, 0, 0,
                     0, 0, 0,
                     0)
-        wdb.mk_addmember(name, somelistp, wdb.NULL, ord("u"))
+        wdb.mk_addmember(name, somelistp, nonestuff, ord("u"))
 
         # make the spatial region
         name = "air.%d.r" % counter
@@ -119,7 +122,7 @@ def main(argv):
                     0)
 
         # add the region to a master region list
-        wdb.mk_addmember(name, biglistp, wdb.NULL, ord("u"))
+        wdb.mk_addmember(name, biglistp, nonestuff, ord("u"))
 
         # keep track of the last combination we made for the next iteration
         prevSolid = solidName
@@ -132,9 +135,9 @@ def main(argv):
                 "air.c",
                 biglistp,
                 0,
-                wdb.NULL,
-                wdb.NULL,
-                wdb.NULL,
+                nonestuff,
+                nonestuff,
+                nonestuff,
                 0, 0, 0,
                 0, 0, 0,
                 0)
@@ -150,21 +153,21 @@ def main(argv):
     #
     # add the land to the main globe object that gets created at the end 
     somelistp = wdb.bu_list_new()
-    wdb.mk_addmember("land.r", somelistp, wdb.NULL, ord("u"))
-    wdb.mk_addmember("air.c", somelistp, wdb.NULL, ord("u"))
+    wdb.mk_addmember("land.r", somelistp, nonestuff, ord("u"))
+    wdb.mk_addmember("air.c", somelistp, nonestuff, ord("u"))
 
     wdb.mk_comb(db_fp,
                 "globe.r",
                 somelistp,
                 is_region,
-                wdb.NULL,
-                wdb.NULL,
-                wdb.NULL,
+                nonestuff,
+                nonestuff,
+                nonestuff,
                 0, 0, 0,
                 0, 0, 0,
                 0)
 
-    wdb._libs.values()[0].wdb_close(db_fp)
+    rt.wdb_close(db_fp)
     return 0
 
 

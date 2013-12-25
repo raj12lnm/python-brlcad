@@ -58,13 +58,13 @@ def main(argv):
     p1[:] = [1.0, 2.0, 3.0]
     wdb.mk_sph(db_fp, "ball.s", p1, 0.75)
 
-    # Make an rpp under the sphere (partly overlapping). NOte that this realy
+    # Make an rpp under the sphere (partly overlapping). Note that this realy
     # makes an arb8, but gives us a shortcut for specifying the parameters.
     p1[:] = [0, 0, 0]
     p2[:] = [2, 4, 2.5]
     wdb.mk_rpp(db_fp, "box.s", p1, p2)
 
-    # Make a region that is the union of these two objectsion. To accomplish
+    # Make a region that is the union of these two objects. To accomplish
     # this, we need to create a linked list of the items that make up the
     # combination. The wm_hd structure serves as the head of the list of items.
 
@@ -82,7 +82,7 @@ def main(argv):
     # Create a wmember structure for each of the items that we want in the
     # combination. The return from mk_addmember is a pointer to the wmember
     # structure.
-    some_wmember = wdb._libs['/usr/brlcad/lib/libwdb.so'].mk_addmember("box.s", somelistp, nonestuff, ord("u"))
+    some_wmember = wdb._libs['/home/csaba/deploy/brlcad/dev-7.24.1/lib/libwdb.so'].mk_addmember("box.s", somelistp, nonestuff, ord("u"))
 
     # Add the second member to the database.
     #
@@ -90,7 +90,7 @@ def main(argv):
     # in the database when you create the wmember structure OR when you create
     # the combination. So mis-typing the name of a sub-element for a
     # region/combination can be a problem.
-    another_wmember = wdb._libs['/usr/brlcad/lib/libwdb.so'].mk_addmember("ball.s", somelistp, nonestuff, ord("u"))
+    another_wmember = wdb._libs['/home/csaba/deploy/brlcad/dev-7.24.1/lib/libwdb.so'].mk_addmember("ball.s", somelistp, nonestuff, ord("u"))
 
     # Create the combination
     #
