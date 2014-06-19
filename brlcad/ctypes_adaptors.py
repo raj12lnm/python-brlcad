@@ -31,6 +31,11 @@ def brlcad_copy(obj, debug_msg):
     ctypes.memmove(obj_copy, ctypes.addressof(obj), count)
     return type(obj).from_address(obj_copy)
 
+def list_init(list):
+    list.forw = ctypes.cast(libbu.byref(list), libbu.POINTER(libbu.bu_list))
+    list.back = ctypes.cast(libbu.byref(list), libbu.POINTER(libbu.bu_list))
+    list.magic = libbu.BU_LIST_HEAD_MAGIC
+
 def bit_set(bitv, bit):
     """
     :param bitv: libbu.bu_bitv structure

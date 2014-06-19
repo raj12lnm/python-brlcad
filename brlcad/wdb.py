@@ -4,8 +4,10 @@ Python wrapper for libwdb adapting python types to the needed ctypes structures.
 import fnmatch
 import brlcad._bindings.libwdb as libwdb
 import brlcad._bindings.libbu as libbu
+import brlcad._bindings.librt as librt
 from brlcad.vmath import Transform
 import os
+import ctypes
 from brlcad.util import check_missing_params
 import brlcad.ctypes_adaptors as cta
 from brlcad.exceptions import BRLCADException
@@ -289,8 +291,16 @@ class WDB:
         ctrl_points: corresponds to metaball control points
                ctrl_point = (point, field_strength, sweat)
         """
-        libwdb.mk_metaball(self.db_fp, name, len(points), method, threshold, cta.array2d_fixed_cols(points, 5,
-                                                                                                use_brlcad_malloc=True))
+        if method <0 or threshold <= 0:
+            raise BRLCADException("Invalid Arguments")
+        m = cta.brlcad_new(libwdb.struct_rt_metaball_internal)
+        m.magic = libwdb.RT_METABALL_INTERNAL_MAGIC
+        m.threshold = threshold
+        m.method = method
+        cta.list_init(m.metaball_ctrl_head)
+        for point in points:
+            librt.rt_metaball_add_point(libwdb.byref(m), cta.doubles(cta.flatten_numbers(point[0])), point[1], point[2])
+        libwdb.wdb_export(self.db_fp, name, libwdb.byref(m), libwdb.ID_METABALL, 1)
 
     @mk_wrap_primitive(primitives.Sketch)
     def sketch(self, name, sketch=None):
