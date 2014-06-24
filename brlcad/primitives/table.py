@@ -28,6 +28,7 @@ from ebm import EBM
 from grip import Grip
 from bot import BOT
 from submodel import Submodel
+from dsp import DSP
 
 
 MAGIC_TO_PRIMITIVE_TYPE = {
@@ -38,7 +39,7 @@ MAGIC_TO_PRIMITIVE_TYPE = {
     librt.ID_BOT: ("BOT", BOT, librt.RT_BOT_INTERNAL_MAGIC, librt.struct_rt_bot_internal),
     librt.ID_BREP: ("BREP", Primitive, librt.RT_BREP_INTERNAL_MAGIC, librt.struct_rt_brep_internal),
     librt.ID_CLINE: ("CLINE", Primitive, librt.RT_CLINE_INTERNAL_MAGIC, librt.struct_rt_cline_internal),
-    librt.ID_DSP: ("DSP", Primitive, librt.RT_DSP_INTERNAL_MAGIC, librt.struct_rt_dsp_internal),
+    librt.ID_DSP: ("DSP", DSP, librt.RT_DSP_INTERNAL_MAGIC, librt.struct_rt_dsp_internal),
     librt.ID_EBM: ("EBM", EBM, librt.RT_EBM_INTERNAL_MAGIC, librt.struct_rt_ebm_internal),
     librt.ID_EHY: ("EHY", EHY, librt.RT_EHY_INTERNAL_MAGIC, librt.struct_rt_ehy_internal),
     librt.ID_ELL: ("ELL", Ellipsoid, librt.RT_ELL_INTERNAL_MAGIC, librt.struct_rt_ell_internal),

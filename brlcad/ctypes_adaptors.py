@@ -36,6 +36,10 @@ def list_init(list):
     list.back = ctypes.cast(libbu.byref(list), libbu.POINTER(libbu.bu_list))
     list.magic = libbu.BU_LIST_HEAD_MAGIC
 
+def MAT_IDN(t):
+    t[1] = t[2] = t[3] = t[4] = t[6] = t[7] = t[8] = t[9] = t[11] = t[12] = t[13] = t[14] = 0.0
+    t[0] = t[5] = t[10] = t[15] = 1.0
+
 def bit_set(bitv, bit):
     """
     :param bitv: libbu.bu_bitv structure
