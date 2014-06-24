@@ -167,7 +167,7 @@ class WDB:
         d = cta.brlcad_new(libwdb.struct_rt_dsp_internal)
         d.magic = libwdb.RT_DSP_INTERNAL_MAGIC
         libbu.bu_vls_init(libbu.byref(d.dsp_name))
-        libbu.bu_vls_strcpy(libbu.byref(d.dsp_name), cta.brlcad_copy(dsp_name,"dsp_name"))
+        libbu.bu_vls_strcpy(libbu.byref(d.dsp_name), dsp_name)
         if data_src == 1:
             d.dsp_datasrc = libwdb.RT_DSP_SRC_FILE
         elif data_src == 2:
