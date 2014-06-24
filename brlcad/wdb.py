@@ -179,11 +179,11 @@ class WDB:
         else:
             d.dsp_smooth = 0
         if cut_direction == 1:
-            d.dsp_cuttype = 97 #libwdb.DSP_CUT_DIR_ADAPT
+            d.dsp_cuttype = ord(libwdb.DSP_CUT_DIR_ADAPT)
         elif cut_direction == 2:
-            d.dsp_cuttype = 154  #libwdb.DSP_CUT_DIR_llUR
+            d.dsp_cuttype = ord(libwdb.DSP_CUT_DIR_llUR)
         elif cut_direction == 3:
-            d.dsp_cuttype = 114 #libwdb.DSP_CUT_DIR_ULlr
+            d.dsp_cuttype = ord(libwdb.DSP_CUT_DIR_ULlr)
         cta.MAT_IDN(d.dsp_stom)
         d.dsp_stom[0] = d.dsp_stom[5] = cell_size
         d.dsp_stom[10] = unit_elevation
