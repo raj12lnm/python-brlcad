@@ -6,7 +6,7 @@ import numpy as np
 import brlcad.ctypes_adaptors as cta
 from brlcad.exceptions import BRLCADException
 
-def test_curves(curves):
+def check_curves(curves):
     ### length of the curves should be more than 3.
     if len(curves) <=2:
         return False
@@ -29,7 +29,7 @@ class ARS(Primitive):
 
     def __init__(self, name, curves, copy=False):
         Primitive.__init__(self, name=name)
-        if test_curves(curves):
+        if check_curves(curves):
             if copy:
                 self.curves = [curve[:] for curve in curves]
             else:

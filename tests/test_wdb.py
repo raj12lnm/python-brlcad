@@ -161,7 +161,7 @@ class WDBTestCase(unittest.TestCase):
         expected = primitives.Grip("grip.s")
         self.assertTrue(expected.has_same_data(shape))
 
-    def test_metaball_defailts(self):
+    def test_metaball_defaults(self):
         shape = self.lookup_shape("metaball.s")
         expected = primitives.Metaball("metaball.s")
         self.assertTrue(expected.has_same_data(shape))

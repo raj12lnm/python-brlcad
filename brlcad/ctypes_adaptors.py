@@ -173,7 +173,10 @@ def array2d_from_pointer(t, num_rows, num_cols):
 
 
 def array2d_fixed_cols(t, num_cols_fixed=5, use_brlcad_malloc=False):
-    result = brlcad_new((ctypes.c_double * num_cols_fixed)*len(t), "metaball array")
+    if use_brlcad_malloc:
+        result = brlcad_new((ctypes.c_double * num_cols_fixed)*len(t), "metaball array")
+    else:
+        result = (ctypes.c_double * num_cols_fixed)*len(t)
     for i in range(len(t)):
         if use_brlcad_malloc:
             result[i] = brlcad_copy(doubles(t[i],double_count=num_cols_fixed), "metaball point")
