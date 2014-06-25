@@ -166,8 +166,7 @@ class WDB:
             unit_elevation=0.005):
         d = cta.brlcad_new(libwdb.struct_rt_dsp_internal)
         d.magic = libwdb.RT_DSP_INTERNAL_MAGIC
-        libbu.bu_vls_init(libbu.byref(d.dsp_name))
-        libbu.bu_vls_strcpy(libbu.byref(d.dsp_name), dsp_name)
+        d.dsp_name = cta.str_to_vls(dsp_name)
         if data_src == 1:
             d.dsp_datasrc = libwdb.RT_DSP_SRC_FILE
         elif data_src == 2:
@@ -188,6 +187,8 @@ class WDB:
         d.dsp_stom[0] = d.dsp_stom[5] = cell_size
         d.dsp_stom[10] = unit_elevation
         libbn.bn_mat_inv(d.dsp_mtos, d.dsp_stom)
+        d.dsp_mp = None
+        d.dsp_bip = None
         libwdb.wdb_export(self.db_fp, name, libwdb.byref(d), libwdb.ID_DSP, 1)
 
     @mk_wrap_primitive(primitives.Ellipsoid)

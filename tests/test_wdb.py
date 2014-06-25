@@ -253,7 +253,7 @@ class WDBTestCase(unittest.TestCase):
 
     def test_dsp_defaults(self):
         shape = self.lookup_shape("dsp.s")
-        expected = primitives.DSP("dsp.s")
+        expected = primitives.DSP("dsp.s", "resources/Ex1.dsp")
         self.assertTrue(expected.has_same_data(shape))
 
     def test_save_primitives(self):
