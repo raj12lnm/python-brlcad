@@ -9,7 +9,7 @@ import brlcad._bindings.libbu as libbu
 
 
 
-def brlcad_new(obj_type, debug_msg=None):
+def brlcad_new(obj_type, debug_msg=None, calloc=False):
     """
     Returns a new obj of class <obj_type> using a buffer allocated via bu_malloc.
     Needed for creating objects which will be freed by BRL-CAD code.
@@ -17,7 +17,10 @@ def brlcad_new(obj_type, debug_msg=None):
     if not debug_msg:
         debug_msg = obj_type.__class__.__name__
     count = ctypes.sizeof(obj_type)
-    obj_buf = libbn.bu_malloc(count, debug_msg)
+    if calloc:
+        obj_buf = libbn.bu_calloc(1, count, debug_msg)
+    else:
+        obj_buf = libbn.bu_malloc(count, debug_msg)
     return obj_type.from_address(obj_buf)
 
 

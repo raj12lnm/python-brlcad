@@ -164,7 +164,7 @@ class WDB:
     @mk_wrap_primitive(primitives.DSP)
     def dsp(self, name, dsp_name, data_src=1, width=142, length=150, interpolation=False, cut_direction=1, cell_size=1,
             unit_elevation=0.005):
-        d = cta.brlcad_new(libwdb.struct_rt_dsp_internal)
+        d = cta.brlcad_new(libwdb.struct_rt_dsp_internal, calloc=True)
         d.magic = libwdb.RT_DSP_INTERNAL_MAGIC
         d.dsp_name = cta.str_to_vls(dsp_name)
         if data_src == 1:
@@ -187,8 +187,6 @@ class WDB:
         d.dsp_stom[0] = d.dsp_stom[5] = cell_size
         d.dsp_stom[10] = unit_elevation
         libbn.bn_mat_inv(d.dsp_mtos, d.dsp_stom)
-        d.dsp_mp = None
-        d.dsp_bip = None
         libwdb.wdb_export(self.db_fp, name, libwdb.byref(d), libwdb.ID_DSP, 1)
 
     @mk_wrap_primitive(primitives.Ellipsoid)
