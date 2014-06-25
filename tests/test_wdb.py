@@ -21,6 +21,7 @@ class WDBTestCase(unittest.TestCase):
             brl_db.rpp("rpp.s")
             brl_db.wedge("wedge.s")
             brl_db.arb4("arb4.s")
+            brl_db.dsp("dsp.s", "resources/Ex1.dsp")
             brl_db.arb5("arb5.s")
             brl_db.arb6("arb6.s")
             brl_db.arb7("arb7.s")
@@ -249,6 +250,11 @@ class WDBTestCase(unittest.TestCase):
         shape = self.lookup_shape("pipe.s")
         expected = primitives.Pipe("pipe.s")
         self.assertTrue(expected.is_same(shape))
+
+    def test_dsp_defaults(self):
+        shape = self.lookup_shape("dsp.s")
+        expected = primitives.DSP("dsp.s", "resources/Ex1.dsp")
+        self.assertTrue(expected.has_same_data(shape))
 
     def test_save_primitives(self):
         test_shape_name = "test_save.s"

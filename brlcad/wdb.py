@@ -4,6 +4,7 @@ Python wrapper for libwdb adapting python types to the needed ctypes structures.
 import fnmatch
 import brlcad._bindings.libwdb as libwdb
 import brlcad._bindings.libbu as libbu
+import brlcad._bindings.libbn as libbn
 import brlcad._bindings.librt as librt
 from brlcad.vmath import Transform
 import os
@@ -159,6 +160,34 @@ class WDB:
     @mk_wrap_primitive(primitives.ARB8)
     def arb8(self, name, points=(1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, 1, 1, -1, 1, -1, -1, 1, -1, 1, 1)):
         libwdb.mk_arb8(self.db_fp, name, cta.doubles(points, double_count=24))
+
+    @mk_wrap_primitive(primitives.DSP)
+    def dsp(self, name, dsp_name, data_src=1, width=142, length=150, interpolation=False, cut_direction=1, cell_size=1,
+            unit_elevation=0.005):
+        d = cta.brlcad_new(libwdb.struct_rt_dsp_internal, calloc=True)
+        d.magic = libwdb.RT_DSP_INTERNAL_MAGIC
+        d.dsp_name = cta.str_to_vls(dsp_name)
+        if data_src == 1:
+            d.dsp_datasrc = libwdb.RT_DSP_SRC_FILE
+        elif data_src == 2:
+            d.dsp_datasrc = libwdb.RT_DSP_SRC_OBJ
+        d.dsp_xcnt = width
+        d.dsp_ycnt = length
+        if interpolation:
+            d.dsp_smooth = 1
+        else:
+            d.dsp_smooth = 0
+        if cut_direction == 1:
+            d.dsp_cuttype = ord(libwdb.DSP_CUT_DIR_ADAPT)
+        elif cut_direction == 2:
+            d.dsp_cuttype = ord(libwdb.DSP_CUT_DIR_llUR)
+        elif cut_direction == 3:
+            d.dsp_cuttype = ord(libwdb.DSP_CUT_DIR_ULlr)
+        cta.MAT_IDN(d.dsp_stom)
+        d.dsp_stom[0] = d.dsp_stom[5] = cell_size
+        d.dsp_stom[10] = unit_elevation
+        libbn.bn_mat_inv(d.dsp_mtos, d.dsp_stom)
+        libwdb.wdb_export(self.db_fp, name, libwdb.byref(d), libwdb.ID_DSP, 1)
 
     @mk_wrap_primitive(primitives.Ellipsoid)
     def ellipsoid(self, name, center=(0, 0, 0), a=(1, 0, 0), b=(0, 1, 0), c=(0, 0, 1)):
