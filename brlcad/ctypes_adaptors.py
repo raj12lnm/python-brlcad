@@ -9,7 +9,7 @@ import brlcad._bindings.libbu as libbu
 
 
 
-def brlcad_new(obj_type, debug_msg=None, calloc=False):
+def brlcad_new(obj_type, debug_msg=None, zero_init=False):
     """
     Returns a new obj of class <obj_type> using a buffer allocated via bu_malloc.
     Needed for creating objects which will be freed by BRL-CAD code.
@@ -17,7 +17,7 @@ def brlcad_new(obj_type, debug_msg=None, calloc=False):
     if not debug_msg:
         debug_msg = obj_type.__class__.__name__
     count = ctypes.sizeof(obj_type)
-    if calloc:
+    if zero_init:
         obj_buf = libbn.bu_calloc(1, count, debug_msg)
     else:
         obj_buf = libbn.bu_malloc(count, debug_msg)
@@ -39,7 +39,7 @@ def list_init(list):
     list.back = ctypes.cast(libbu.byref(list), libbu.POINTER(libbu.bu_list))
     list.magic = libbu.BU_LIST_HEAD_MAGIC
 
-def MAT_IDN(t):
+def unit_transform(t):
     t[1] = t[2] = t[3] = t[4] = t[6] = t[7] = t[8] = t[9] = t[11] = t[12] = t[13] = t[14] = 0.0
     t[0] = t[5] = t[10] = t[15] = 1.0
 
